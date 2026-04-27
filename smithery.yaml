@@ -1,0 +1,122 @@
+        # Smithery Registry — HiveEscrow MCP Server
+        # https://smithery.ai
+        # Backend status: v0.1 — pending hivemorph backend build (Q3 2026 spec)
+
+        startCommand:
+          type: http
+          configSchema:
+            type: object
+            properties: {}
+            required: []
+          url: https://hivemorph.onrender.com/mcp/hive-mcp-escrow
+
+        name: hive-mcp-escrow
+        displayName: HiveEscrow — Agent-to-agent escrow service with x402 settlement, dispute resolution, and arbiter assignment
+        version: "1.0.0"
+        description: >
+          MCP server for the Hive Escrow platform. Agents open escrow agreements between buyer and seller DIDs, fund them on-chain via USDC/x402 settlement on Base, Ethereum, or Solana, release funds upon delivery confirmation, and route disputes to an arbiter for resolution. Terms are hashed on-chain for auditability. Backend build is Q3 2026. Tool calls currently return HTTP 503 with a feature-gating response — no mock data is ever returned. Submit interest via hive-mcp-connector.
+
+        author:
+          name: Steve Rotzin
+          email: steve@thehiveryiq.com
+          url: https://www.thehiveryiq.com
+
+        license: MIT
+        homepage: https://github.com/srotzin/hive-mcp-escrow
+        repository:
+          type: git
+          url: https://github.com/srotzin/hive-mcp-escrow
+
+        transport: streamable-http
+        endpoint: https://hivemorph.onrender.com/mcp
+        protocol: "2024-11-05"
+
+        categories:
+          - escrow
+  - finance
+  - agent-to-agent
+  - web3
+  - defi
+  - settlement
+
+        tags:
+          - mcp
+  - hive
+  - escrow
+  - x402
+  - usdc
+  - base-l2
+  - a2a
+  - dispute
+  - settlement
+  - ai-agents
+
+        tools:
+                - name: open_escrow
+          description: >
+            Open an escrow agreement between buyer and seller DIDs. Terms are stored as a hash on-chain. Returns escrow_id. Backend pending (Q3 2026).
+          inputs:
+            - name: buyer_did
+  type: string
+  required: true
+  description: "DID of the buyer agent"
+- name: seller_did
+  type: string
+  required: true
+  description: "DID of the seller agent"
+- name: amount_usd
+  type: number
+  required: true
+  description: "Escrow amount in USD"
+- name: terms_hash
+  type: string
+  required: true
+  description: "SHA-256 hash of the agreed terms document"
+        - name: fund_escrow
+          description: >
+            Fund an open escrow by submitting the on-chain transaction hash. USDC settlement via x402 on Base, Ethereum, or Solana. Backend pending (Q3 2026).
+          inputs:
+            - name: escrow_id
+  type: string
+  required: true
+  description: "Escrow ID from open_escrow"
+- name: tx_hash
+  type: string
+  required: true
+  description: "On-chain funding transaction hash"
+        - name: release
+          description: >
+            Release escrowed funds to the seller upon delivery confirmation. Requires signer DID (buyer or designated arbiter). Backend pending (Q3 2026).
+          inputs:
+            - name: escrow_id
+  type: string
+  required: true
+  description: "Escrow ID to release"
+- name: signer_did
+  type: string
+  required: true
+  description: "DID of the releasing party (buyer or arbiter)"
+        - name: dispute
+          description: >
+            Open a dispute on an active escrow. Routes to Hive arbiter assignment. Funds remain locked until resolution. Returns arbiter_assignment. Backend pending (Q3 2026).
+          inputs:
+            - name: escrow_id
+  type: string
+  required: true
+  description: "Escrow ID to dispute"
+- name: reason
+  type: string
+  required: true
+  description: "Reason for the dispute"
+
+        runtime:
+          type: node
+          version: ">=18"
+          command: node server.js
+          env:
+            - name: PORT
+              default: "3000"
+              required: false
+            - name: HIVE_BASE
+              default: "https://hivemorph.onrender.com"
+              required: false

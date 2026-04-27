@@ -1,0 +1,39 @@
+{
+  "name": "hive-mcp-escrow",
+  "version": "1.0.0",
+  "description": "MCP server for the Hive Escrow platform. Agents open escrow agreements between buyer and seller DIDs, fund them on-chain via USDC/x402 settlement on Base, Ethereum, or Solana, release funds upon deliv",
+  "type": "module",
+  "main": "server.js",
+  "bin": {
+    "hive-mcp-escrow": "./server.js"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "mcp",
+    "hive",
+    "escrow",
+    "x402",
+    "usdc",
+    "base-l2",
+    "a2a",
+    "dispute",
+    "settlement",
+    "ai-agents"
+  ],
+  "author": "Steve Rotzin <steve@thehiveryiq.com> (https://www.thehiveryiq.com)",
+  "license": "MIT",
+  "homepage": "https://github.com/srotzin/hive-mcp-escrow",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/srotzin/hive-mcp-escrow"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
