@@ -81,7 +81,7 @@ const SERVICE_CFG = {
   tagline: "Multi-party escrow with stake-weighted dispute routing for autonomous agents.",
   description: "MCP server for HiveEscrow \u2014 multi-party agent escrow and settlement on the Hive Civilization. Stake-weighted dispute routing, ZK-attested arbitration. USDC settlement on Base L2. Real rails, no mocks.",
   keywords: ["mcp", "model-context-protocol", "x402", "agentic", "ai-agent", "ai-agents", "llm", "hive", "hive-civilization", "escrow", "multi-party-escrow", "settlement", "dispute-routing", "arbitration", "usdc", "base", "base-l2", "agent-economy", "a2a"],
-  externalUrl: "https://hive-mcp-gateway.onrender.com/escrow",
+  externalUrl: "https://hive-mcp-escrow.onrender.com",
   gatewayMount: "/escrow",
   version: "1.0.1",
   pricing: [
