@@ -14,6 +14,7 @@
  */
 
 import express from 'express';
+import { renderLanding, renderRobots, renderSitemap, renderSecurity, renderOgImage, seoJson, BRAND_GOLD } from './meta.js';
 
 const app = express();
 app.use(express.json());
@@ -72,6 +73,24 @@ properties: {
     }
 ];
 
+
+const SERVICE_CFG = {
+  service: "hive-mcp-escrow",
+  shortName: "HiveEscrow",
+  title: "HiveEscrow \u00b7 Multi-Party Agent Escrow & Settlement MCP",
+  tagline: "Multi-party escrow with stake-weighted dispute routing for autonomous agents.",
+  description: "MCP server for HiveEscrow \u2014 multi-party agent escrow and settlement on the Hive Civilization. Stake-weighted dispute routing, ZK-attested arbitration. USDC settlement on Base L2. Real rails, no mocks.",
+  keywords: ["mcp", "model-context-protocol", "x402", "agentic", "ai-agent", "ai-agents", "llm", "hive", "hive-civilization", "escrow", "multi-party-escrow", "settlement", "dispute-routing", "arbitration", "usdc", "base", "base-l2", "agent-economy", "a2a"],
+  externalUrl: "https://hive-mcp-gateway.onrender.com/escrow",
+  gatewayMount: "/escrow",
+  version: "1.0.1",
+  pricing: [
+    { name: "escrow_open", priceUsd: 0.05, label: "Open escrow (Tier 3)" },
+    { name: "escrow_release", priceUsd: 0.005, label: "Release (Tier 2)" },
+    { name: "escrow_dispute", priceUsd: 0.05, label: "Open dispute (Tier 3)" }
+  ],
+};
+SERVICE_CFG.tools = (typeof TOOLS !== 'undefined' ? TOOLS : []).map(t => ({ name: t.name, description: t.description }));
 // ─── Feature-gate response (Rails Rule 1 — no mock) ──────────────────────────
 function featureGate(res) {
   return res.status(503).json({
@@ -136,6 +155,24 @@ app.get('/.well-known/mcp.json', (req, res) => res.json({
   tools: TOOLS.map(t => ({ name: t.name, description: t.description })),
 }));
 
+
+// HIVE_META_BLOCK_v1 — comprehensive meta tags + JSON-LD + crawler discovery
+app.get('/', (req, res) => {
+  res.type('text/html; charset=utf-8').send(renderLanding(SERVICE_CFG));
+});
+app.get('/og.svg', (req, res) => {
+  res.type('image/svg+xml').send(renderOgImage(SERVICE_CFG));
+});
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain').send(renderRobots(SERVICE_CFG));
+});
+app.get('/sitemap.xml', (req, res) => {
+  res.type('application/xml').send(renderSitemap(SERVICE_CFG));
+});
+app.get('/.well-known/security.txt', (req, res) => {
+  res.type('text/plain').send(renderSecurity());
+});
+app.get('/seo.json', (req, res) => res.json(seoJson(SERVICE_CFG)));
 app.listen(PORT, () => {
   console.log('HiveEscrow MCP Server running on :' + PORT);
   console.log('  Backend : ' + HIVE_BASE);
