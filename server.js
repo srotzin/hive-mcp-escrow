@@ -177,7 +177,7 @@ app.get('/seo.json', (req, res) => res.json(seoJson(SERVICE_CFG)));
 // ─── Schema discoverability ────────────────────────────────────────────────
 const AGENT_CARD = {
   name: SERVICE,
-  description: `MCP server for HiveEscrow — agent-to-agent escrow with x402 settlement and dispute resolution. Open, fund, release, and dispute escrow agreements. Arbiter assignment on dispute. USDC settlement on Base, Ethereum, or Solana. Scaffold shim — backend pending Q3 2026.. New agents: first call free. Loyalty: every 6th paid call is free. Pay in USDC on Base L2.`,
+  description: 'MCP server for HiveEscrow — agent-to-agent escrow with x402 settlement and dispute resolution. Open, fund, release, and dispute escrow agreements. USDC settlement on Base, Ethereum, or Solana.. New agents: first call free. Loyalty: every 6th paid call is free. Pay in USDC on Base L2.',
   url: `https://${SERVICE}.onrender.com`,
   provider: {
     organization: 'Hive Civilization',
@@ -202,7 +202,12 @@ const AGENT_CARD = {
   },
   defaultInputModes: ['application/json'],
   defaultOutputModes: ['application/json'],
-  skills: TOOLS.map(t => ({ name: t.name, description: t.description })),
+  skills: [
+    { name: 'open_escrow', description: 'Open an escrow agreement between buyer and seller DIDs. Terms are stored as a hash on-chain. Returns escrow_id. Backend pending (Q3 2026).' },
+    { name: 'fund_escrow', description: 'Fund an open escrow by submitting the on-chain transaction hash. USDC settlement via x402 on Base, Ethereum, or Solana. Backend pending (Q3 2026).' },
+    { name: 'release', description: 'Release escrowed funds to the seller upon delivery confirmation. Requires signer DID (buyer or designated arbiter). Backend pending (Q3 2026).' },
+    { name: 'dispute', description: 'Open a dispute on an active escrow. Routes to Hive arbiter assignment. Funds remain locked until resolution. Returns arbiter_assignment. Backend pending (Q3 2026).' },
+  ],
   extensions: {
     hive_pricing: {
       currency: 'USDC',
@@ -220,7 +225,7 @@ const AP2 = {
   agent: {
     name: SERVICE,
     did: `did:web:${SERVICE}.onrender.com`,
-    description: `MCP server for HiveEscrow — agent-to-agent escrow with x402 settlement and dispute resolution. Open, fund, release, and dispute escrow agreements. Arbiter assignment on dispute. USDC settlement on Base, Ethereum, or Solana. Scaffold shim — backend pending Q3 2026.. New agents: first call free. Loyalty: every 6th paid call is free. Pay in USDC on Base L2.`,
+    description: 'MCP server for HiveEscrow — agent-to-agent escrow with x402 settlement and dispute resolution. Open, fund, release, and dispute escrow agreements. USDC settlement on Base, Ethereum, or Solana.. New agents: first call free. Loyalty: every 6th paid call is free. Pay in USDC on Base L2.',
   },
   endpoints: {
     mcp: `https://${SERVICE}.onrender.com/mcp`,
@@ -240,7 +245,7 @@ const AP2 = {
 };
 
 app.get('/.well-known/agent-card.json', (req, res) => res.json(AGENT_CARD));
-app.get('/.well-known/ap2.json', (req, res) => res.json(AP2));
+app.get('/.well-known/ap2.json',         (req, res) => res.json(AP2));
 
 
 app.listen(PORT, () => {
